@@ -32,9 +32,6 @@ echo " Data de inicio: $DATAIN"
 backupdif(){
 sync
 
-echo find $SRCDIR -type f -cmin $TIME_FIND -exec tar -rvf $ARQ {} ";"
-echo "name="$NAME
-
 find $SRCDIR -type f -cmin $TIME_FIND -exec tar -rvf $ARQ {} ";"
 
 if [ $? -eq 0 ] ; then
