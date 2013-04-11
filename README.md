@@ -6,8 +6,11 @@ bkp-diferencial
 criar os arquivos de log e dar permissão de escrita
 
 > sudo touch /var/log/backup_compactacao.log
+
 > sudo chmod 777 /var/log/backup_compactacao.log
+
 > sudo touch /var/log/backup_diferencial.log
+
 > sudo chmod 777 /var/log/backup_diferencial.log
 
 ## Execução:
