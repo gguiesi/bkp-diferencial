@@ -1,0 +1,27 @@
+#!/bin/bash
+
+$LOG=/var/log/backup_compactacao.log
+
+echo "Script de compactação"
+#DSTDIR=/Users/geraldo.junior/Desktop/apagar/origin
+ORGDIR=$1
+DSTDIR=$2
+NAME=$3
+
+DATAIN=`date +%c`
+echo "Data de inicio: $DATAIN"
+
+#tar czf bkp-`date +"%Y%m%d-%H%M"`.tar.gz $DSTDIR
+tar czf $DSTDIR/bkp-$NAME-`date +"%Y%m%d-%H%M"`.tar.gz $ORGDIR
+
+echo "Compactação concluída"
+DATAFIN=`date +%c`
+echo "Data de termino: $DATAFIN"
+echo "Compactação concluída"
+echo "INICIO: $DATAIN" >> $LOG
+echo "FIM: $DATAFIN" >> $LOG
+echo "Realizado pelo usuário: $USER" >> $LOG
+echo "-----------------------------------" >> $LOG
+echo "Log gerado em /var/log/backup_compactacao.log"
+
+exit 0

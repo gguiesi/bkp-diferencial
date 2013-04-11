@@ -1,0 +1,75 @@
+#!/bin/bash
+
+echo "Programa de Backup Diferencial"
+#Autor: Geraldo Guiesi Junior
+#Programa de criação de backup diferencial
+#DATA: 05/04/2013
+echo " "
+
+LOG=/var/log/backup_diferencial.log
+
+SRCDIR=$1   # diretórios que serão feitos backup
+DSTDIR=$2   # diretório de destino do backup
+NAME=$3     # nome do arquivo
+
+dadosdif() {
+
+DATA=`date +"%Y%m%d-%H%M"`
+TIME_FIND=0 #+xx busca arquivos criados existentes a xx minutos (arquivos que tenham mais de xx minutos)
+#-xx arquivos que tenham sido criados nos últimos xx minutos
+#12 horas = 720 minutos 8horas 480 minutos
+
+TIME_DEL=+7 # dias em que permanecera o backup diferencial armazenado
+
+#criar o arquivo dif-data.tar no diretório de destino
+ARQ=$DSTDIR/dif-$NAME-$DATA.tar.gz
+#data de inicio backup
+DATAIN=`date +%c`
+echo " Data de inicio: $DATAIN"
+
+}
+
+backupdif(){
+sync
+
+echo find $SRCDIR -type f -cmin $TIME_FIND -exec tar -rvf $ARQ {} ";"
+echo "name="$NAME
+
+find $SRCDIR -type f -cmin $TIME_FIND -exec tar -rvf $ARQ {} ";"
+
+if [ $? -eq 0 ] ; then
+   echo "--------------------------------------"
+        echo "Backup Diferencial concluído com sucesso"
+   DATAFIN=`date +%c`
+   echo "Data de termino: $DATAFIN"
+   echo "Backup realizado com sucesso" >> $LOG
+   echo "Criado pelo usuário: $USER" >> $LOG
+   echo "INICIO: $DATAIN" >> $LOG
+   echo "FIM: $DATAFIN" >> $LOG
+   echo "------------------------------------------------" >> $LOG
+   echo " "
+   echo "Log gerado em /var/log/backup_diferencial.log"
+
+else
+   echo "ERRO! Backup Diferencial $DATAIN" >> $LOG
+fi
+}
+
+procuraedestroidif(){
+
+#apagando arquivos mais antigos (a 7 dias que existe (-cmin +2)
+find $DSTDIR -name "dif*" -ctime $TIME_DEL -exec rm -f {} ";"
+   if [ $? -eq 0 ] ; then
+      echo "Arquivo de backup mais antigo eliminado com sucesso!"
+   else
+      echo "Erro durante a busca e destruição do backup antigo!"
+   fi
+}
+
+dadosdif
+backupdif
+#procuraedestroidif
+
+#. ./compactar.backup #chama e roda o script de compactação de backup
+
+exit 0
