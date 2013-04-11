@@ -25,4 +25,4 @@ Backup diferencial: esse processo toma todos os arquivos novos das últimas 24hs
 
 ## Inclusão do processo na cron
 
-> 0 3 * * * sh <path do script>/bkp-diff
+> 0 3 * * * sh /path/do/script/bkp-diff
